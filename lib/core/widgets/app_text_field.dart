@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
@@ -17,8 +18,10 @@ class AppTextField extends StatelessWidget {
   final AutovalidateMode autovalidateMode;
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onFieldSubmitted;
+  final ValueChanged<String>? onChanged;
   final bool enabled;
   final FormFieldErrorBuilder? errorBuilder;
+  final FocusNode? focusNode;
 
   const AppTextField({
     super.key,
@@ -34,8 +37,10 @@ class AppTextField extends StatelessWidget {
     this.autovalidateMode = AutovalidateMode.disabled,
     this.inputFormatters,
     this.onFieldSubmitted,
+    this.onChanged,
     this.enabled = true,
     this.errorBuilder,
+    this.focusNode,
   });
 
   static Widget defaultErrorBuilder(BuildContext context, String errorText) {
@@ -66,32 +71,92 @@ class AppTextField extends StatelessWidget {
   }
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  final GlobalKey<FormFieldState<String>> _fieldKey =
+      GlobalKey<FormFieldState<String>>();
+  bool _hasBeenValidated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onControllerChanged);
+  }
+
+  @override
+  void didUpdateWidget(AppTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onControllerChanged);
+      widget.controller.addListener(_onControllerChanged);
+      _hasBeenValidated = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onControllerChanged);
+    super.dispose();
+  }
+
+  void _onControllerChanged() {
+    if (!mounted) return;
+    // Re-validate only if validation was already triggered on this particular field
+    if (_hasBeenValidated || (_fieldKey.currentState?.hasError ?? false)) {
+      _hasBeenValidated = true;
+      if (WidgetsBinding.instance.schedulerPhase ==
+          SchedulerPhase.persistentCallbacks) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _fieldKey.currentState?.didChange(widget.controller.text);
+            _fieldKey.currentState?.validate();
+          }
+        });
+      } else {
+        _fieldKey.currentState?.didChange(widget.controller.text);
+        _fieldKey.currentState?.validate();
+      }
+    }
+  }
+
+  String? _validate(String? value) {
+    _hasBeenValidated = true;
+    final text = widget.controller.text;
+    return widget.validator?.call(text);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          label,
+          widget.label,
           style: AppTextStyles.labelLarge,
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          validator: validator,
-          autovalidateMode: autovalidateMode,
-          inputFormatters: inputFormatters,
-          onFieldSubmitted: onFieldSubmitted,
-          enabled: enabled,
+          key: _fieldKey,
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
+          textInputAction: widget.textInputAction,
+          validator: _validate,
+          autovalidateMode: widget.autovalidateMode,
+          inputFormatters: widget.inputFormatters,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          onChanged: widget.onChanged,
+          enabled: widget.enabled,
           style: AppTextStyles.bodyMedium,
-          errorBuilder: errorBuilder ?? defaultErrorBuilder,
+          errorBuilder: widget.errorBuilder ?? AppTextField.defaultErrorBuilder,
           decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
+            hintText: widget.hint,
+            prefixIcon: widget.prefixIcon,
+            suffixIcon: widget.suffixIcon,
           ),
         ),
       ],

@@ -15,6 +15,13 @@ class RegisterPage extends StatelessWidget {
       subtitle:
           'Create an account to start managing and tracking your assignments.',
       illustrationPath: AppAssets.registerIllustration,
+      onBackPressed: () {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.goNamed('login');
+        }
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constants/app_assets.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
+import 'curved_wave_header.dart';
 
 class ResponsiveAuthLayout extends StatelessWidget {
   final Widget child;
@@ -11,6 +12,7 @@ class ResponsiveAuthLayout extends StatelessWidget {
   final String subtitle;
   final String illustrationPath;
   final bool showIllustrationOnMobile;
+  final VoidCallback? onBackPressed;
 
   const ResponsiveAuthLayout({
     super.key,
@@ -19,6 +21,7 @@ class ResponsiveAuthLayout extends StatelessWidget {
     required this.subtitle,
     this.illustrationPath = AppAssets.loginIllustration,
     this.showIllustrationOnMobile = false,
+    this.onBackPressed,
   });
 
   @override
@@ -106,7 +109,22 @@ class ResponsiveAuthLayout extends StatelessWidget {
                         ),
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 440),
-                          child: child,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (onBackPressed != null) ...[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AuthBackButton(
+                                    onPressed: onBackPressed!,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                              child,
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -116,35 +134,44 @@ class ResponsiveAuthLayout extends StatelessWidget {
             );
           }
 
-          // Single pane for screens under 800px width
-          return SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 24,
+          // Single pane with dual-layer curved wave header for screens under 800px width
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CurvedWaveHeader(
+                  height: 150,
+                  onBackPressed: onBackPressed,
                 ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 440),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (showIllustrationOnMobile) ...[
-                        Center(
-                          child: SvgPicture.asset(
-                            illustrationPath,
-                            height: 140,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                      child,
-                    ],
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 440),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (showIllustrationOnMobile) ...[
+                            Center(
+                              child: SvgPicture.asset(
+                                illustrationPath,
+                                height: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                          child,
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           );
         },

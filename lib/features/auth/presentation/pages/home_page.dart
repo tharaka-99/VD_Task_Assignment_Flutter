@@ -95,11 +95,11 @@ class HomePage extends StatelessWidget {
                     value: user?.email ?? 'N/A',
                   ),
                   const SizedBox(height: 16),
-                  _InfoRow(
-                    icon: FontAwesomeIcons.idCard,
-                    label: 'Account ID',
-                    value: user?.id ?? 'N/A',
-                  ),
+                  // _InfoRow(
+                  //   icon: FontAwesomeIcons.idCard,
+                  //   label: 'Account ID',
+                  //   value: user?.id ?? 'N/A',
+                  // ),
                   const SizedBox(height: 32),
                   PrimaryButton(
                     text: 'Log Out',

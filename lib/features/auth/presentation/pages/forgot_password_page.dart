@@ -16,6 +16,13 @@ class ForgotPasswordPage extends StatelessWidget {
           'Enter your registered email or mobile number to receive reset instructions.',
       illustrationPath: AppAssets.forgotPasswordIllustration,
       showIllustrationOnMobile: true,
+      onBackPressed: () {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.goNamed('login');
+        }
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,

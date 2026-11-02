@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
           AppTextField(
             controller: _identifierController,
             label: 'Email or Mobile Number',
-            hint: 'test@example.com or 0771234567',
+            hint: 'Enter Email or Mobile Number',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: Validators.validateLoginIdentifier,

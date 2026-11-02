@@ -12,8 +12,10 @@ class PasswordField extends StatefulWidget {
   final String? Function(String?)? validator;
   final AutovalidateMode autovalidateMode;
   final ValueChanged<String>? onFieldSubmitted;
+  final ValueChanged<String>? onChanged;
   final bool enabled;
   final FormFieldErrorBuilder? errorBuilder;
+  final FocusNode? focusNode;
 
   const PasswordField({
     super.key,
@@ -25,8 +27,10 @@ class PasswordField extends StatefulWidget {
     this.validator,
     this.autovalidateMode = AutovalidateMode.disabled,
     this.onFieldSubmitted,
+    this.onChanged,
     this.enabled = true,
     this.errorBuilder,
+    this.focusNode,
   });
 
   @override
@@ -54,8 +58,10 @@ class _PasswordFieldState extends State<PasswordField> {
       validator: widget.validator,
       autovalidateMode: widget.autovalidateMode,
       onFieldSubmitted: widget.onFieldSubmitted,
+      onChanged: widget.onChanged,
       enabled: widget.enabled,
       errorBuilder: widget.errorBuilder,
+      focusNode: widget.focusNode,
       suffixIcon: IconButton(
         icon: FaIcon(
           _obscureText ? FontAwesomeIcons.eyeSlash : FontAwesomeIcons.eye,
