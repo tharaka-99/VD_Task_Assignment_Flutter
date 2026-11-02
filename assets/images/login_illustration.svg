@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="loginGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B5BDB"/>
+      <stop offset="100%" stop-color="#748FFC"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="20" fill="url(#loginGrad)"/>
+  <circle cx="200" cy="115" r="45" fill="#FFFFFF" fill-opacity="0.2"/>
+  <circle cx="200" cy="110" r="22" fill="#FFFFFF"/>
+  <path d="M165 165 C165 145, 235 145, 235 165" fill="#FFFFFF"/>
+  <rect x="130" y="195" width="140" height="12" rx="6" fill="#FFFFFF" fill-opacity="0.9"/>
+  <rect x="150" y="217" width="100" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.6"/>
+</svg>

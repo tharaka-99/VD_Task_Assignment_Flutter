@@ -1,0 +1,67 @@
+name: vd_dev_task_assignment
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.2
+  equatable: ^3.0.0
+  go_router: ^17.0.0
+  dartz: ^0.10.1
+  shared_preferences: ^2.5.3
+  flutter_svg: ^2.2.3
+  font_awesome_flutter: ^10.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.5
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Geom
+      fonts:
+        - asset: assets/fonts/Geom-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Geom-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Geom-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Geom-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Geom-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Geom-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Geom-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Geom-Black.ttf
+          weight: 900
